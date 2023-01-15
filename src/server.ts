@@ -9,7 +9,7 @@ import { createGame, getPlayers, getTurn, increasePointer, removeGame, resetSequ
 
 const app = express()
 const server = http.createServer(app)
-const key = process.env.SECRET
+// const key = process.env.SECRET
 
 const io = new Server(server, {
   cors: {
@@ -25,8 +25,8 @@ app.get('/', (_: any, res: any) => {
 
 io.on('connection', (socket) => {
   socket.removeAllListeners()
-  socket.on('createRoom', (data: { key: string, name: string}) => {
-    if (key === data.key) {
+  socket.on('createRoom', (data: { name: string }) => {
+    // if (key === data.key) {
       const user: User = {
         id: socket.id,
         name: data.name,
@@ -37,9 +37,9 @@ io.on('connection', (socket) => {
       socket.join(user.roomId)
       socket.emit('setUser', user)
       socket.emit('getRoomId', user.roomId)
-    } else {
-      io.to(socket.id).emit('incorrectKey')
-    }
+    // } else {
+    //   io.to(socket.id).emit('incorrectKey')
+    // }
   })
   socket.on('joinRoom', (data: {name: string, roomId: string}) => {
     const noOfUsers = getAllUsers().filter((user: User) => user.roomId === data.roomId).length
