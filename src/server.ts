@@ -90,6 +90,9 @@ io.on('connection', (socket) => {
     const players = getPlayers(roomId)
     socket.emit('getAllPlayersInGame', players)
   })
+    
+  let time: number = null
+  let timeHandler: ReturnType<typeof setInterval>
 
   socket.on('startGame', (data: any) => {
     createGame(data)
@@ -104,9 +107,6 @@ io.on('connection', (socket) => {
     io.to(data.players[1].id).emit('setPlayer', 1)
     io.in(data.roomId).emit('startGame', data.mode)
   })
-  
-  let time: number = null
-  let timeHandler: ReturnType<typeof setInterval>
 
   socket.on('nextTurn', (roomId: string) => {
     clearInterval(timeHandler)
@@ -146,7 +146,6 @@ io.on('connection', (socket) => {
   })
 
   socket.on('goBack', (roomId: string) => {
-    clearInterval(timeHandler)
     removeGame(roomId)
     io.in(roomId).emit('goBack')
   })
