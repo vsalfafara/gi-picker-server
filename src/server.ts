@@ -102,10 +102,9 @@ io.on('connection', (socket) => {
     }
     setPlayers(data.roomId, data.players)
     setSequence(data.roomId, data.mode)
-    console.log(getGame(data.roomId))
     io.to(data.players[0].id).emit('setPlayer', 0)
     io.to(data.players[1].id).emit('setPlayer', 1)
-    io.in(data.roomId).emit('startGame', data.mode)
+    io.in(data.roomId).emit('startGame', data)
   })
 
   socket.on('nextTurn', (roomId: string) => {
@@ -130,7 +129,6 @@ io.on('connection', (socket) => {
         time = game.time
         timeHandler = setInterval(() => {
           time--
-          console.log(time)
           io.to(roomId).emit('getTime', time)
           if (time === 0) {
             clearInterval(timeHandler)
