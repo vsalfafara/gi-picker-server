@@ -23,6 +23,8 @@ export type Sequence = {
 
 export type Game = {
   roomId: string
+  withTimer: boolean
+  time: number
   pointer: number
   players: User[]
   sequence: Sequence[]

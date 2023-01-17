@@ -2,16 +2,23 @@ import { Game, Sequence, User } from "./types"
 
 let games: Game[] = []
 
-export function createGame(roomId: string) {
-  const game = games.find((game: Game) => game.roomId === roomId)
+export function createGame(data: any) {
+  const { roomId, withTimer, time } = data
+  const game = games.find((game: Game) => game.roomId === data.roomId)
   if (!game) {
     games.push({
-      roomId,
+      roomId: roomId,
+      withTimer: withTimer === 'Yes',
+      time: time,
       pointer: -1,
       players: [],
       sequence: []
     })
   }
+}
+
+export function getGame(roomId: string) {
+  return games.find((game: Game) => game.roomId === roomId)
 }
 
 export function removeGame(roomId: string) {
@@ -52,7 +59,7 @@ export function increasePointer(roomId: string) {
 
 export function getTurn(roomId: string) {
   const turn = games.find((game: Game) => game.roomId === roomId)
-  if (turn.pointer < turn.sequence.length)
+  if (turn?.pointer < turn?.sequence.length)
     return turn.sequence[turn.pointer]
   return false
 }

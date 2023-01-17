@@ -3,9 +3,9 @@ import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
 import { v4 as uuidv4 } from 'uuid'
-import { User, Character } from './types'
+import { User, Character, Sequence } from './types'
 import { getAllUsers, userJoin, getUser, getAllPlayersInRoom, removeUser } from './users'
-import { createGame, getPlayers, getTurn, increasePointer, removeGame, resetSequence, setPlayers, setSequence } from './games';
+import { createGame, getGame, getPlayers, getTurn, increasePointer, removeGame, resetSequence, setPlayers, setSequence } from './games';
 
 const app = express()
 const server = http.createServer(app)
@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
       socket.emit('getRoomId', user.roomId)
       socket.emit('setUser', user)
       const players = getAllPlayersInRoom(user.roomId)
-      io.to(user.roomId).emit('getAllPlayersInRoom', players)
+      io.in(user.roomId).emit('getAllPlayersInRoom', players)
     } else {
       socket.emit('roomIsFull')
     }
@@ -71,7 +71,7 @@ io.on('connection', (socket) => {
         socket.join(user.roomId)
         socket.emit('setUser', user)
         const players = getAllPlayersInRoom(user.roomId)
-        io.to(user.roomId).emit('getAllPlayersInRoom', players)
+        io.in(user.roomId).emit('getAllPlayersInRoom', players)
       }
     }
   })
@@ -92,32 +92,61 @@ io.on('connection', (socket) => {
   })
 
   socket.on('startGame', (data: any) => {
-    createGame(data.roomId)
+    createGame(data)
     resetSequence(data.roomId)
     if (data.firstPick) {
       data.players = [data.players[1], data.players[0]]
     }
     setPlayers(data.roomId, data.players)
     setSequence(data.roomId, data.mode)
+    console.log(getGame(data.roomId))
     io.to(data.players[0].id).emit('setPlayer', 0)
     io.to(data.players[1].id).emit('setPlayer', 1)
-    io.to(data.roomId).emit('startGame', data.mode)
+    io.in(data.roomId).emit('startGame', data.mode)
   })
+  
+  let time: number = null
+  let timeHandler: ReturnType<typeof setInterval>
 
   socket.on('nextTurn', (roomId: string) => {
+    clearInterval(timeHandler)
     increasePointer(roomId)
     const turn = getTurn(roomId)
     if (turn) {
-      io.to(roomId).emit('announceTurn', turn)
+      io.in(roomId).emit('announceTurn', turn)
       io.to(turn.player.id).emit('select', turn.selection)
     }
   })
 
-  socket.on('removeCharacter', (data: {character: Character, roomId: string, player: number, selection: string }) => {
+  socket.on('stopTimer', () => {
+    clearInterval(timeHandler)
+  })
+
+  socket.on('startTimer', (roomId: string) => {
+    const game = getGame(roomId)
+    if (game.withTimer) {
+      const turn: Sequence | boolean = getTurn(roomId)
+      if (turn) {
+        time = game.time
+        timeHandler = setInterval(() => {
+          time--
+          console.log(time)
+          io.to(roomId).emit('getTime', time)
+          if (time === 0) {
+            clearInterval(timeHandler)
+            io.to(turn.player.id).emit('noPick', turn.selection)
+          }
+        }, 1000)
+      }
+    }
+  })
+
+  socket.on('removeCharacter', (data: {character: Character, roomId: string, player: number, selectionType: number }) => {
     socket.to(data.roomId).emit('removeCharacter', data)
   })
 
   socket.on('goBack', (roomId: string) => {
+    clearInterval(timeHandler)
     removeGame(roomId)
     io.in(roomId).emit('goBack')
   })
