@@ -107,6 +107,10 @@ io.on('connection', (socket) => {
     io.in(data.roomId).emit('startGame', data)
   })
 
+  socket.on('draftStart', (roomId: string) => {
+    io.in(roomId).emit('draftStart')
+  })
+
   socket.on('nextTurn', (roomId: string) => {
     clearInterval(timeHandler)
     increasePointer(roomId)
