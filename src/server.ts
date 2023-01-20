@@ -166,7 +166,8 @@ io.on('connection', (socket) => {
       socket.leave(user.roomId)
       const players = getAllPlayersInRoom(user.roomId)
       io.to(user.roomId).emit('getAllPlayersInRoom', players)
-      resetSequence(user.roomId)
+      io.to(user.roomId).emit('disconnected', user.name)
+      // resetSequence(user.roomId)
     }
     console.log('user disconnected')
   })
