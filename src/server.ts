@@ -159,6 +159,11 @@ io.on('connection', (socket) => {
     }
   })
 
+  socket.on('chat', (data: any) => {
+    console.log(socket.id)
+    socket.broadcast.emit('chat', data)
+  })
+
   socket.on('disconnect', () => {
     const user = getUser(socket.id)
     if (user) {
