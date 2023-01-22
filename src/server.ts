@@ -102,6 +102,8 @@ io.on('connection', (socket) => {
     }
     setPlayers(data.roomId, data.players)
     setSequence(data.roomId, data.mode)
+    data.game = getGame(data.roomId)
+    data.game.mode = data.mode
     io.to(data.players[0].id).emit('setPlayer', 0)
     io.to(data.players[1].id).emit('setPlayer', 1)
     io.in(data.roomId).emit('startGame', data)
@@ -136,15 +138,19 @@ io.on('connection', (socket) => {
           io.to(roomId).emit('getTime', time)
           if (time === 0) {
             clearInterval(timeHandler)
-            io.to(turn.player.id).emit('noPick', turn.selection)
+            io.to(turn.player.id).emit('noPick', turn)
           }
         }, 1000)
       }
     }
   })
 
-  socket.on('removeCharacter', (data: {character: Character, roomId: string, player: number, selectionType: number }) => {
-    socket.to(data.roomId).emit('removeCharacter', data)
+  socket.on('removeCharacterFromPanel', (data: {character: Character, roomId: string, player: number, selectionType: number }) => {
+    io.in(data.roomId).emit('removeCharacterFromPanel', data)
+  })
+
+  socket.on('setNewSelection', (data: any) => {
+    io.in(data.roomId).emit('setNewSelection', data)
   })
 
   socket.on('goBack', (roomId: string) => {
@@ -160,7 +166,6 @@ io.on('connection', (socket) => {
   })
 
   socket.on('chat', (data: any) => {
-    console.log(socket.id)
     socket.broadcast.emit('chat', data)
   })
 
