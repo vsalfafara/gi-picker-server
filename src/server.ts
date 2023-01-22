@@ -4,7 +4,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import { v4 as uuidv4 } from 'uuid'
 import { User, Character, Sequence } from './types'
-import { getAllUsers, userJoin, getUser, getAllPlayersInRoom, removeUser } from './users'
+import { getAllUsers, userJoin, getUser, getAllPlayersInRoom, removeUser, getHostInRoom } from './users'
 import { createGame, getGame, getPlayers, getTurn, increasePointer, removeGame, resetSequence, setPlayers, setSequence } from './games';
 
 const app = express()
@@ -145,7 +145,7 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('removeCharacterFromPanel', (data: {character: Character, roomId: string, player: number, selectionType: number }) => {
+  socket.on('removeCharacterFromPanel', (data: {character: Character, roomId: string }) => {
     io.in(data.roomId).emit('removeCharacterFromPanel', data)
   })
 
@@ -177,7 +177,6 @@ io.on('connection', (socket) => {
       const players = getAllPlayersInRoom(user.roomId)
       io.to(user.roomId).emit('getAllPlayersInRoom', players)
       io.to(user.roomId).emit('disconnected', user.name)
-      // resetSequence(user.roomId)
     }
     console.log('user disconnected')
   })
