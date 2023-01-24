@@ -111,23 +111,23 @@ export function setSequence(roomId: string, mode: string) {
         },
         {
           turn: 3,
-          player: players[0],
-          selection: 1
+          player: players[1],
+          selection: 0
         },
         {
           turn: 4,
-          player: players[1],
-          selection: 1
+          player: players[0],
+          selection: 0
         },
         {
           turn: 5,
-          player: players[1],
-          selection: 0
+          player: players[0],
+          selection: 1
         },
         {
           turn: 6,
-          player: players[0],
-          selection: 0
+          player: players[1],
+          selection: 1
         },
         {
           turn: 7,
@@ -155,12 +155,12 @@ export function setSequence(roomId: string, mode: string) {
         },
         {
           turn: 3,
-          player: players[0],
+          player: players[1],
           selection: 0
         },
         {
           turn: 4,
-          player: players[1],
+          player: players[0],
           selection: 0
         },
         {
@@ -175,12 +175,12 @@ export function setSequence(roomId: string, mode: string) {
         },
         {
           turn: 7,
-          player: players[0],
+          player: players[1],
           selection: 1
         },
         {
           turn: 8,
-          player: players[1],
+          player: players[0],
           selection: 1
         },
         {
@@ -219,12 +219,12 @@ export function setSequence(roomId: string, mode: string) {
         },
         {
           turn: 3,
-          player: players[0],
+          player: players[1],
           selection: 0
         },
         {
           turn: 4,
-          player: players[1],
+          player: players[0],
           selection: 0
         },
         {
@@ -239,12 +239,12 @@ export function setSequence(roomId: string, mode: string) {
         },
         {
           turn: 7,
-          player: players[0],
+          player: players[1],
           selection: 1
         },
         {
           turn: 8,
-          player: players[1],
+          player: players[0],
           selection: 1
         },
         {
@@ -259,12 +259,12 @@ export function setSequence(roomId: string, mode: string) {
         },
         {
           turn: 11,
-          player: players[1],
+          player: players[0],
           selection: 0
         },
         {
           turn: 12,
-          player: players[0],
+          player: players[1],
           selection: 0
         },
         {
@@ -279,12 +279,12 @@ export function setSequence(roomId: string, mode: string) {
         },
         {
           turn: 15,
-          player: players[1],
+          player: players[0],
           selection: 1
         },
         {
           turn: 16,
-          player: players[0],
+          player: players[1],
           selection: 1
         }
       ]
