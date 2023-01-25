@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { User, Character, Sequence } from './types'
 import { getAllUsers, userJoin, getUser, getAllPlayersInRoom, removeUser, getHostInRoom } from './users'
 import { createGame, getGame, getPlayers, getTurn, increasePointer, removeGame, resetSequence, setPlayers, setSequence } from './games';
+import { info } from 'console';
 
 const app = express()
 const server = http.createServer(app)
@@ -120,6 +121,8 @@ io.on('connection', (socket) => {
     if (turn) {
       io.in(roomId).emit('announceTurn', turn)
       io.to(turn.player.id).emit('select', turn.selection)
+    } else {
+      io.in(roomId).emit('gameCompleted')
     }
   })
 
