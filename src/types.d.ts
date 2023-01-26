@@ -22,6 +22,7 @@ export type Sequence = {
 }
 
 export type Game = {
+  autoban: any
   roomId: string
   withTimer: boolean
   time: number

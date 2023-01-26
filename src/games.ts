@@ -3,10 +3,11 @@ import { Game, Sequence, User } from "./types"
 let games: Game[] = []
 
 export function createGame(data: any) {
-  const { roomId, withTimer, time } = data
+  const { autoban, roomId, withTimer, time } = data
   const game = games.find((game: Game) => game.roomId === data.roomId)
   if (!game) {
     games.push({
+      autoban,
       roomId: roomId,
       withTimer: withTimer === 'Yes',
       time: time,
