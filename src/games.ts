@@ -70,226 +70,341 @@ export function getTurn(roomId: string) {
   1 = pick
 */
 
-export function setSequence(roomId: string, mode: string) {
+export function setSequence(roomId: string, gameType: string, mode: number) {
   let sequence: Sequence[] = []
   const players = getPlayers(roomId)
-  switch (mode) {
-    case '1v1':
-      sequence = [
-        {
-          turn: 1,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 2,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 3,
-          player: players[0],
-          selection: 1
-        },
-        {
-          turn: 4,
-          player: players[1],
-          selection: 1
-        }
-      ]
-      break
-    case '2v2':
-      sequence = [
-        {
-          turn: 1,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 2,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 3,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 4,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 5,
-          player: players[0],
-          selection: 1
-        },
-        {
-          turn: 6,
-          player: players[1],
-          selection: 1
-        },
-        {
-          turn: 7,
-          player: players[1],
-          selection: 1
-        },
-        {
-          turn: 8,
-          player: players[0],
-          selection: 1
-        }
-      ]
-      break
-    case '3v3':
-      sequence = [
-        {
-          turn: 1,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 2,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 3,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 4,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 5,
-          player: players[0],
-          selection: 1
-        },
-        {
-          turn: 6,
-          player: players[1],
-          selection: 1
-        },
-        {
-          turn: 7,
-          player: players[1],
-          selection: 1
-        },
-        {
-          turn: 8,
-          player: players[0],
-          selection: 1
-        },
-        {
-          turn: 9,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 10,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 11,
-          player: players[1],
-          selection: 1
-        },
-        {
-          turn: 12,
-          player: players[0],
-          selection: 1
-        }
-      ]
-      break
-    case '4v4':
-      sequence = [
-        {
-          turn: 1,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 2,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 3,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 4,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 5,
-          player: players[0],
-          selection: 1
-        },
-        {
-          turn: 6,
-          player: players[1],
-          selection: 1
-        },
-        {
-          turn: 7,
-          player: players[1],
-          selection: 1
-        },
-        {
-          turn: 8,
-          player: players[0],
-          selection: 1
-        },
-        {
-          turn: 9,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 10,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 11,
-          player: players[0],
-          selection: 0
-        },
-        {
-          turn: 12,
-          player: players[1],
-          selection: 0
-        },
-        {
-          turn: 13,
-          player: players[1],
-          selection: 1
-        },
-        {
-          turn: 14,
-          player: players[0],
-          selection: 1
-        },
-        {
-          turn: 15,
-          player: players[0],
-          selection: 1
-        },
-        {
-          turn: 16,
-          player: players[1],
-          selection: 1
-        }
-      ]
-      break
+  if (gameType === 'std') {
+    switch (Number(mode)) {
+      case 1:
+        sequence = [
+          {
+            turn: 1,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 2,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 3,
+            player: players[0],
+            selection: 1
+          },
+          {
+            turn: 4,
+            player: players[1],
+            selection: 1
+          }
+        ]
+        break
+      case 2:
+        sequence = [
+          {
+            turn: 1,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 2,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 3,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 4,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 5,
+            player: players[0],
+            selection: 1
+          },
+          {
+            turn: 6,
+            player: players[1],
+            selection: 1
+          },
+          {
+            turn: 7,
+            player: players[1],
+            selection: 1
+          },
+          {
+            turn: 8,
+            player: players[0],
+            selection: 1
+          }
+        ]
+        break
+      case 3:
+        sequence = [
+          {
+            turn: 1,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 2,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 3,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 4,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 5,
+            player: players[0],
+            selection: 1
+          },
+          {
+            turn: 6,
+            player: players[1],
+            selection: 1
+          },
+          {
+            turn: 7,
+            player: players[1],
+            selection: 1
+          },
+          {
+            turn: 8,
+            player: players[0],
+            selection: 1
+          },
+          {
+            turn: 9,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 10,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 11,
+            player: players[1],
+            selection: 1
+          },
+          {
+            turn: 12,
+            player: players[0],
+            selection: 1
+          }
+        ]
+        break
+      case 4:
+        sequence = [
+          {
+            turn: 1,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 2,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 3,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 4,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 5,
+            player: players[0],
+            selection: 1
+          },
+          {
+            turn: 6,
+            player: players[1],
+            selection: 1
+          },
+          {
+            turn: 7,
+            player: players[1],
+            selection: 1
+          },
+          {
+            turn: 8,
+            player: players[0],
+            selection: 1
+          },
+          {
+            turn: 9,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 10,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 11,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 12,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 13,
+            player: players[1],
+            selection: 1
+          },
+          {
+            turn: 14,
+            player: players[0],
+            selection: 1
+          },
+          {
+            turn: 15,
+            player: players[0],
+            selection: 1
+          },
+          {
+            turn: 16,
+            player: players[1],
+            selection: 1
+          }
+        ]
+        break
+    }
+  } else if (gameType === 'abyss') {
+    sequence = [
+      {
+        turn: 1,
+        player: players[0],
+        selection: 0
+      },
+      {
+        turn: 2,
+        player: players[1],
+        selection: 0
+      },
+      {
+        turn: 3,
+        player: players[1],
+        selection: 0
+      },
+      {
+        turn: 4,
+        player: players[0],
+        selection: 0
+      },
+      {
+        turn: 5,
+        player: players[0],
+        selection: 1
+      },
+      {
+        turn: 6,
+        player: players[1],
+        selection: 1
+      },
+      {
+        turn: 7,
+        player: players[1],
+        selection: 1
+      },
+      {
+        turn: 8,
+        player: players[0],
+        selection: 1
+      },
+      {
+        turn: 9,
+        player: players[0],
+        selection: 1
+      },
+      {
+        turn: 10,
+        player: players[1],
+        selection: 1
+      },
+      {
+        turn: 11,
+        player: players[1],
+        selection: 1
+      },
+      {
+        turn: 12,
+        player: players[0],
+        selection: 1
+      },
+      {
+        turn: 13,
+        player: players[1],
+        selection: 0
+      },
+      {
+        turn: 14,
+        player: players[0],
+        selection: 0
+      },
+      {
+        turn: 15,
+        player: players[1],
+        selection: 1
+      },
+      {
+        turn: 16,
+        player: players[0],
+        selection: 1
+      },
+      {
+        turn: 17,
+        player: players[0],
+        selection: 1
+      },
+      {
+        turn: 18,
+        player: players[1],
+        selection: 1
+      },
+      {
+        turn: 19,
+        player: players[1],
+        selection: 1
+      },
+      {
+        turn: 20,
+        player: players[0],
+        selection: 1
+      },
+      {
+        turn: 21,
+        player: players[0],
+        selection: 1
+      },
+      {
+        turn: 22,
+        player: players[1],
+        selection: 1
+      },
+    ]
   }
   games = games.map((game: Game) => {
     if (game.roomId === roomId) {

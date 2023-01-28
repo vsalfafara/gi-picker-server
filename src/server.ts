@@ -102,7 +102,7 @@ io.on('connection', (socket) => {
       data.players = [data.players[1], data.players[0]]
     }
     setPlayers(data.roomId, data.players)
-    setSequence(data.roomId, data.mode)
+    setSequence(data.roomId, data.gameType, data.mode)
     data.game = getGame(data.roomId)
     data.game.mode = data.mode
     io.to(data.players[0].id).emit('setPlayer', 0)
