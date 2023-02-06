@@ -89,11 +89,21 @@ export function setSequence(roomId: string, gameType: string, mode: number) {
           },
           {
             turn: 3,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 4,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 5,
             player: players[0],
             selection: 1
           },
           {
-            turn: 4,
+            turn: 6,
             player: players[1],
             selection: 1
           }
@@ -134,10 +144,20 @@ export function setSequence(roomId: string, gameType: string, mode: number) {
           {
             turn: 7,
             player: players[1],
-            selection: 1
+            selection: 0
           },
           {
             turn: 8,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 9,
+            player: players[1],
+            selection: 1
+          },
+          {
+            turn: 10,
             player: players[0],
             selection: 1
           }
@@ -197,11 +217,21 @@ export function setSequence(roomId: string, gameType: string, mode: number) {
           },
           {
             turn: 11,
+            player: players[0],
+            selection: 0
+          },
+          {
+            turn: 12,
+            player: players[1],
+            selection: 0
+          },
+          {
+            turn: 13,
             player: players[1],
             selection: 1
           },
           {
-            turn: 12,
+            turn: 14,
             player: players[0],
             selection: 1
           }
