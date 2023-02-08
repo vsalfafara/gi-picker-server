@@ -168,22 +168,22 @@ export function setSequence(roomId: string, gameType: string, mode: number) {
           {
             turn: 5,
             player: players[0],
-            selection: 0
+            selection: 1
           },
           {
             turn: 6,
             player: players[1],
-            selection: 0
+            selection: 1
           },
           {
             turn: 7,
-            player: players[0],
-            selection: 1
+            player: players[1],
+            selection: 0
           },
           {
             turn: 8,
-            player: players[1],
-            selection: 1
+            player: players[0],
+            selection: 0
           },
           {
             turn: 9,
