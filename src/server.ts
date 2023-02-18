@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', (data: {name: string, roomId: string}) => {
     const noOfUsers = getAllUsers().filter((user: User) => user.roomId === data.roomId).length
 
-    if (noOfUsers < 3) {
+    // if (noOfUsers < 3) {
       const user: User = {
         id: socket.id,
         name: data.name,
@@ -58,9 +58,9 @@ io.on('connection', (socket) => {
       socket.emit('setUser', user)
       const players = getAllPlayersInRoom(user.roomId)
       io.in(user.roomId).emit('getAllPlayersInRoom', players)
-    } else {
-      socket.emit('roomIsFull')
-    }
+    // } else {
+    //   socket.emit('roomIsFull')
+    // }
   })
   
   socket.on('rejoinRoom', (user?: User) => {
