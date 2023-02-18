@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
     // }
   })
   socket.on('joinRoom', (data: {name: string, roomId: string}) => {
-    const noOfUsers = getAllUsers().filter((user: User) => user.roomId === data.roomId).length
+    // const noOfUsers = getAllUsers().filter((user: User) => user.roomId === data.roomId).length
 
     // if (noOfUsers < 3) {
       const user: User = {
