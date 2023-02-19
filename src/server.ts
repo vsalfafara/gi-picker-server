@@ -172,6 +172,10 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('chat', data)
   })
 
+  socket.on('setSheetData', ({sheetData, roomId}) => {
+    io.in(roomId).emit('setSheetData', sheetData)
+  })
+
   socket.on('disconnect', () => {
     const user = getUser(socket.id)
     if (user) {
