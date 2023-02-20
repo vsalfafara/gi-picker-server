@@ -1,12 +1,14 @@
 import 'dotenv/config';
 import express from 'express'
 import http from 'http'
+import cors from 'cors'
 import { Server } from 'socket.io'
 import { v4 as uuidv4 } from 'uuid'
 import { User, Character, Sequence } from './types'
 import { getAllUsers, userJoin, getUser, getAllPlayersInRoom, removeUser, getHostInRoom } from './users'
 import { createGame, getGame, getPlayers, getTurn, increasePointer, removeGame, resetSequence, setPlayers, setSequence } from './games';
-import { info } from 'console';
+import saveData from './sheets';
+import type { Request, Response } from 'express'
 
 const app = express()
 const server = http.createServer(app)
@@ -20,47 +22,48 @@ const io = new Server(server, {
 
 const PORT = process.env.PORT || 5000
 
-app.get('/', (_: any, res: any) => {
+app.use(cors())
+app.use(express.urlencoded({
+  extended: true
+}));
+app.use(express.json());
+
+app.get('/', (_: Request, res: Response) => {
   res.sendStatus(200)
+})
+
+app.post('/saveData', async (req: Request, res: Response) => {
+  const response = await saveData(req.body)
+  res.sendStatus(response.status)
 })
 
 io.on('connection', (socket) => {
   socket.removeAllListeners()
   socket.on('createRoom', (data: { name: string }) => {
-    // if (key === data.key) {
-      const user: User = {
-        id: socket.id,
-        name: data.name,
-        roomId: uuidv4(),
-        isHost: true
-      }
-      userJoin(user)
-      socket.join(user.roomId)
-      socket.emit('setUser', user)
-      socket.emit('getRoomId', user.roomId)
-    // } else {
-    //   io.to(socket.id).emit('incorrectKey')
-    // }
+    const user: User = {
+      id: socket.id,
+      name: data.name,
+      roomId: uuidv4(),
+      isHost: true
+    }
+    userJoin(user)
+    socket.join(user.roomId)
+    socket.emit('setUser', user)
+    socket.emit('getRoomId', user.roomId)
   })
   socket.on('joinRoom', (data: {name: string, roomId: string}) => {
-    // const noOfUsers = getAllUsers().filter((user: User) => user.roomId === data.roomId).length
-
-    // if (noOfUsers < 3) {
-      const user: User = {
-        id: socket.id,
-        name: data.name,
-        roomId: data.roomId,
-        isHost: false
-      }
-      userJoin(user)
-      socket.join(user.roomId)
-      socket.emit('getRoomId', user.roomId)
-      socket.emit('setUser', user)
-      const players = getAllPlayersInRoom(user.roomId)
-      io.in(user.roomId).emit('getAllPlayersInRoom', players)
-    // } else {
-    //   socket.emit('roomIsFull')
-    // }
+    const user: User = {
+      id: socket.id,
+      name: data.name,
+      roomId: data.roomId,
+      isHost: false
+    }
+    userJoin(user)
+    socket.join(user.roomId)
+    socket.emit('getRoomId', user.roomId)
+    socket.emit('setUser', user)
+    const players = getAllPlayersInRoom(user.roomId)
+    io.in(user.roomId).emit('getAllPlayersInRoom', players)
   })
   
   socket.on('rejoinRoom', (user?: User) => {
@@ -105,6 +108,22 @@ io.on('connection', (socket) => {
     setSequence(data.roomId, data.gameType, data.mode)
     data.game = getGame(data.roomId)
     data.game.mode = data.mode
+    const modeNumber = Number(data.mode.charAt(0))
+    data.noOfPicks = 0
+    data.noOfBans = 0
+    if (data.gameType === 'std' && !!modeNumber) {
+      data.noOfPicks = Number(modeNumber)
+      data.noOfBans = Number(modeNumber)
+    } else if (data.gameType === 'abyss'){
+      data.noOfPicks = 8
+      data.noOfBans = 3
+    } else if (data.mode === 'kingOfTeyvat') {
+      data.noOfPicks = 3
+      data.noOfBans = 3
+    } else if (data.mode === 'fight2DaTop') {
+      data.noOfPicks = 2
+      data.noOfBans = 4
+    }
     io.to(data.players[0].id).emit('setPlayer', 0)
     io.to(data.players[1].id).emit('setPlayer', 1)
     io.in(data.roomId).emit('startGame', data)
