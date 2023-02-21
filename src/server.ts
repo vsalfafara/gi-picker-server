@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { User, Character, Sequence } from './types'
 import { getAllUsers, userJoin, getUser, getAllPlayersInRoom, removeUser, getHostInRoom } from './users'
 import { createGame, getGame, getPlayers, getTurn, increasePointer, removeGame, resetSequence, setPlayers, setSequence } from './games';
-import saveData from './sheets';
+import {saveData, getData } from './sheets';
 import type { Request, Response } from 'express'
 
 const app = express()
@@ -35,6 +35,11 @@ app.get('/', (_: Request, res: Response) => {
 app.post('/saveData', async (req: Request, res: Response) => {
   const response = await saveData(req.body)
   res.sendStatus(response.status)
+})
+
+app.get('/getData/:mode', async (req: Request, res: Response) => {
+  const response = await getData(req.params.mode)
+  res.json(response.data.values.length + 1)
 })
 
 io.on('connection', (socket) => {
@@ -105,25 +110,11 @@ io.on('connection', (socket) => {
       data.players = [data.players[1], data.players[0]]
     }
     setPlayers(data.roomId, data.players)
-    setSequence(data.roomId, data.gameType, data.mode)
+    const selection = setSequence(data.roomId, data.gameType, data.mode)
     data.game = getGame(data.roomId)
     data.game.mode = data.mode
-    const modeNumber = Number(data.mode.charAt(0))
-    data.noOfPicks = 0
-    data.noOfBans = 0
-    if (data.gameType === 'std' && !!modeNumber) {
-      data.noOfPicks = Number(modeNumber)
-      data.noOfBans = Number(modeNumber)
-    } else if (data.gameType === 'abyss'){
-      data.noOfPicks = 8
-      data.noOfBans = 3
-    } else if (data.mode === 'kingOfTeyvat') {
-      data.noOfPicks = 3
-      data.noOfBans = 3
-    } else if (data.mode === 'fight2DaTop') {
-      data.noOfPicks = 2
-      data.noOfBans = 4
-    }
+    data.noOfPicks = Number(selection.noOfPicks)
+    data.noOfBans = Number(selection.noOfBans)
     io.to(data.players[0].id).emit('setPlayer', 0)
     io.to(data.players[1].id).emit('setPlayer', 1)
     io.in(data.roomId).emit('startGame', data)
@@ -191,8 +182,8 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('chat', data)
   })
 
-  socket.on('setSheetData', ({sheetData, roomId}) => {
-    io.in(roomId).emit('setSheetData', sheetData)
+  socket.on('setSheetData', ({sheetData, roomId, colReference}) => {
+    io.in(roomId).emit('setSheetData', ({sheetData, colReference}))
   })
 
   socket.on('disconnect', () => {

@@ -1,5 +1,6 @@
 import { Game, Sequence, User } from "../types"
 import abyss from "./abyss/abyss"
+import amberGames from "./amberGames"
 import fight2DaTop from "./fight2DaTop"
 import kingOfTeyvat from "./kingOfTeyvat"
 import standard1v1 from "./standard/1v1"
@@ -94,6 +95,9 @@ export function setSequence(roomId: string, gameType: string, mode: string) {
       case '4v4':
         sequence = standard4v4(players)
         break
+      case 'amberGames':
+        sequence = amberGames(players)
+        break
       case 'kingOfTeyvat':
         sequence = kingOfTeyvat(players)
         break
@@ -110,4 +114,22 @@ export function setSequence(roomId: string, gameType: string, mode: string) {
     }
     return game
   })
+
+  let selections = {
+    noOfPicks: 0,
+    noOfBans: 0
+  }
+
+  sequence.forEach((turn: any) => {
+    if (turn.selection) {
+      selections.noOfPicks++
+    } else {
+      selections.noOfBans++
+    }
+  })
+
+  selections.noOfPicks = selections.noOfPicks / 2
+  selections.noOfBans = selections.noOfBans / 2
+
+  return selections;
 }
