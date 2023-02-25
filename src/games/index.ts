@@ -1,7 +1,6 @@
 import { Game, Sequence, User } from "../types"
 import abyss from "./abyss/abyss"
 import amberGames from "./amberGames"
-import fight2DaTop from "./fight2DaTop"
 import kingOfTeyvat from "./kingOfTeyvat"
 import standard1v1 from "./standard/1v1"
 import standard2v2 from "./standard/2v2"
@@ -17,11 +16,11 @@ export function createGame(data: any) {
     games.push({
       autoban,
       roomId: roomId,
-      withTimer: withTimer === 'Yes',
+      withTimer: withTimer === "Yes",
       time: time,
       pointer: -1,
       players: [],
-      sequence: []
+      sequence: [],
     })
   }
 }
@@ -68,8 +67,7 @@ export function increasePointer(roomId: string) {
 
 export function getTurn(roomId: string) {
   const turn = games.find((game: Game) => game.roomId === roomId)
-  if (turn?.pointer < turn?.sequence.length)
-    return turn.sequence[turn.pointer]
+  if (turn?.pointer < turn?.sequence.length) return turn.sequence[turn.pointer]
   return false
 }
 
@@ -81,31 +79,28 @@ export function getTurn(roomId: string) {
 export function setSequence(roomId: string, gameType: string, mode: string) {
   let sequence: Sequence[] = []
   const players = getPlayers(roomId)
-  if (gameType === 'std') {
+  if (gameType === "std") {
     switch (mode) {
-      case '1v1':
+      case "1v1":
         sequence = standard1v1(players)
         break
-      case '2v2':
+      case "2v2":
         sequence = standard2v2(players)
         break
-      case '3v3':
+      case "3v3":
         sequence = standard3v3(players)
         break
-      case '4v4':
+      case "4v4":
         sequence = standard4v4(players)
         break
-      case 'amberGames':
+      case "amberGames":
         sequence = amberGames(players)
         break
-      case 'kingOfTeyvat':
+      case "kingOfTeyvat":
         sequence = kingOfTeyvat(players)
         break
-      case 'fight2DaTop':
-        sequence = fight2DaTop(players)
-        break
     }
-  } else if (gameType === 'abyss') {
+  } else if (gameType === "abyss") {
     sequence = abyss(players)
   }
   games = games.map((game: Game) => {
@@ -117,7 +112,7 @@ export function setSequence(roomId: string, gameType: string, mode: string) {
 
   let selections = {
     noOfPicks: 0,
-    noOfBans: 0
+    noOfBans: 0,
   }
 
   sequence.forEach((turn: any) => {
@@ -131,5 +126,5 @@ export function setSequence(roomId: string, gameType: string, mode: string) {
   selections.noOfPicks = selections.noOfPicks / 2
   selections.noOfBans = selections.noOfBans / 2
 
-  return selections;
+  return selections
 }
