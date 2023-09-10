@@ -5,14 +5,7 @@ import cors from "cors";
 import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 import { User, Character, Sequence } from "./types";
-import {
-  getAllUsers,
-  userJoin,
-  getUser,
-  getAllPlayersInRoom,
-  removeUser,
-  getHostInRoom,
-} from "./users";
+import { userJoin, getUser, getAllPlayersInRoom, removeUser } from "./users";
 import {
   createGame,
   getGame,
@@ -24,12 +17,10 @@ import {
   setPlayers,
   setSequence,
 } from "./games";
-// import { saveData, getData } from "./sheets";
 import type { Request, Response } from "express";
 
 const app = express();
 const server = http.createServer(app);
-// const key = process.env.SECRET
 
 const io = new Server(server, {
   cors: {
@@ -50,16 +41,6 @@ app.use(express.json());
 app.get("/", (_: Request, res: Response) => {
   res.sendStatus(200);
 });
-
-// app.post('/saveData', async (req: Request, res: Response) => {
-//   const response = await saveData(req.body)
-//   res.sendStatus(response.status)
-// })
-
-// app.get('/getData/:mode', async (req: Request, res: Response) => {
-//   const response = await getData(req.params.mode)
-//   res.json(response.data.values.length + 1)
-// })
 
 io.on("connection", (socket) => {
   socket.removeAllListeners();
